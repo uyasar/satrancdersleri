@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satranç Dersleri — Kraliyet oyununu öğren</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── RESET & BASE ─────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #fafafa;
+    --bg-soft: #f5f5f5;
+    --ink: #0a0a0a;
+    --ink-2: #1a1a1a;
+    --ink-3: #525252;
+    --ink-4: #737373;
+    --ink-5: #a3a3a3;
+    --line: #e5e5e5;
+    --line-soft: #f0f0f0;
+    --accent: #0a0a0a;
+    --success: #16a34a;
+    --error: #dc2626;
+    --warn: #ea580c;
+    --light-sq: #f5f5f5;
+    --dark-sq: #d4d4d4;
+    --r: 8px;
+    --r-sm: 4px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-lg: 0 24px 48px -16px rgba(0,0,0,0.12);
+  }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
+  }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input { font-family: inherit; }
+  ::selection { background: var(--ink); color: var(--bg); }
+
+  /* ─── LAYOUT ───────────────────────────────────────────── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 768px) { .container { padding: 0 32px; } }
+
+  /* ─── NAV ──────────────────────────────────────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0; gap: 24px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 16px; letter-spacing: -0.02em;
+  }
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: var(--ink); color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .nav-links { display: none; gap: 4px; }
+  @media (min-width: 768px) { .nav-links { display: flex; } }
+  .nav-link {
+    padding: 8px 14px; font-size: 14px; font-weight: 500; color: var(--ink-3);
+    border-radius: var(--r-sm); transition: all 150ms;
+  }
+  .nav-link:hover { color: var(--ink); }
+  .nav-link.active { color: var(--ink); background: var(--bg-soft); }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .nav-burger { display: flex; padding: 8px; }
+  @media (min-width: 768px) { .nav-burger { display: none; } }
+
+  .nav-mobile {
+    display: none;
+    border-top: 1px solid var(--line);
+    background: var(--bg);
+    padding: 8px 0;
+  }
+  .nav-mobile.open { display: block; }
+  .nav-mobile a {
+    display: block; padding: 12px 24px; font-size: 14px; color: var(--ink-3);
+    text-decoration: none; font-weight: 500;
+  }
+  .nav-mobile a.active { color: var(--ink); background: var(--bg-soft); }
+
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--ink); color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .user-pill {
+    display: flex; align-items: center; gap: 10px; padding: 4px 12px 4px 4px;
+    border-radius: 999px; transition: background 150ms;
+  }
+  .user-pill:hover { background: var(--bg-soft); }
+  .user-name { font-size: 14px; font-weight: 500; }
+
+  /* ─── BUTTONS ──────────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 10px 18px; font-size: 14px; font-weight: 500;
+    border-radius: 999px; transition: all 150ms;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-primary:hover { background: var(--ink-2); transform: translateY(-1px); }
+  .btn-primary:disabled { background: var(--ink-5); cursor: not-allowed; transform: none; }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn-soft { background: var(--bg-soft); color: var(--ink); }
+  .btn-soft:hover { background: var(--line); }
+  .btn-lg { padding: 14px 24px; font-size: 15px; }
+  .btn-sm { padding: 6px 12px; font-size: 13px; }
+  .btn-icon { padding: 8px; min-width: 36px; }
+
+  /* ─── HERO ─────────────────────────────────────────────── */
+  .hero { padding: 80px 0 80px; }
+  @media (min-width: 768px) { .hero { padding: 120px 0 100px; } }
+  .hero-grid {
+    display: grid; gap: 60px; align-items: center;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 1024px) {
+    .hero-grid { grid-template-columns: 1.2fr 1fr; gap: 80px; }
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 24px;
+  }
+  .eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--ink-4);
+  }
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .hero h1 em {
+    font-style: italic; font-weight: 400;
+    color: var(--ink-3);
+  }
+  .hero p.lead {
+    font-size: 17px; line-height: 1.6; color: var(--ink-3);
+    max-width: 480px; margin-bottom: 32px;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    margin-top: 56px; padding-top: 32px;
+    border-top: 1px solid var(--line);
+    max-width: 480px;
+  }
+  .stat-num {
+    font-size: 28px; font-weight: 500; letter-spacing: -0.02em;
+    color: var(--ink); line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px; color: var(--ink-4); margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+  .hero-board-wrap {
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+  }
+
+  /* ─── BOARD ────────────────────────────────────────────── */
+  .board {
+    display: inline-block;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    box-shadow: var(--shadow-lg);
+  }
+  .board-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    border-radius: var(--r-sm);
+    overflow: hidden;
+  }
+  .square {
+    aspect-ratio: 1; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px;
+    transition: background 100ms;
+    border: none; padding: 0;
+  }
+  @media (min-width: 640px) { .square { width: 52px; height: 52px; } }
+  @media (min-width: 768px) { .square { width: 58px; height: 58px; } }
+  .square.light { background: var(--light-sq); }
+  .square.dark { background: var(--dark-sq); }
+  .square.clickable { cursor: pointer; }
+  .square.clickable:hover { filter: brightness(0.95); }
+  .square.selected::before {
+    content: ''; position: absolute; inset: 0;
+    box-shadow: inset 0 0 0 3px var(--ink);
+    z-index: 2;
+  }
+  .square.highlight::after {
+    content: ''; position: absolute; inset: 8px;
+    border-radius: 50%;
+    background: rgba(10,10,10,0.12);
+    border: 2px solid var(--ink);
+    z-index: 1;
+  }
+  .piece {
+    font-size: 32px; line-height: 1;
+    user-select: none; pointer-events: none;
+    position: relative; z-index: 3;
+    transition: transform 120ms;
+  }
+  @media (min-width: 640px) { .piece { font-size: 38px; } }
+  @media (min-width: 768px) { .piece { font-size: 42px; } }
+  .piece.white { color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.3), 0 0 1px rgba(0,0,0,0.6); }
+  .piece.black { color: var(--ink); }
+  .square.selected .piece { transform: scale(1.1); }
+  .coord {
+    position: absolute; font-size: 9px; font-weight: 600;
+    color: var(--ink-4); pointer-events: none; z-index: 1;
+  }
+  .coord-rank { left: 3px; top: 2px; }
+  .coord-file { right: 3px; bottom: 2px; }
+
+  /* ─── SECTIONS ─────────────────────────────────────────── */
+  .section { padding: 80px 0; }
+  @media (min-width: 768px) { .section { padding: 120px 0; } }
+  .section-alt { background: var(--bg-alt); }
+  .section h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 500; letter-spacing: -0.03em; line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .section h2 em { font-style: italic; font-weight: 400; color: var(--ink-3); }
+  .section-lead {
+    font-size: 17px; color: var(--ink-3); line-height: 1.6;
+    max-width: 600px; margin-bottom: 56px;
+  }
+
+  /* ─── FEATURE GRID ─────────────────────────────────────── */
+  .features {
+    display: grid; gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) { .features { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .features { grid-template-columns: repeat(4, 1fr); } }
+  .feature {
+    background: var(--bg); padding: 32px;
+  }
+  .feature-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg-soft); display: flex;
+    align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .feature h3 {
+    font-size: 17px; font-weight: 500; margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .feature p { font-size: 14px; color: var(--ink-4); line-height: 1.6; }
+
+  /* ─── AUDIENCE CARDS ───────────────────────────────────── */
+  .audiences { display: grid; gap: 16px; }
+  @media (min-width: 768px) { .audiences { grid-template-columns: 1fr 1fr; } }
+  .audience-card {
+    padding: 40px 32px; border-radius: var(--r);
+    background: var(--bg); border: 1px solid var(--line);
+    transition: all 200ms; text-align: left; width: 100%; cursor: pointer;
+  }
+  @media (min-width: 768px) { .audience-card { padding: 56px 40px; } }
+  .audience-card:hover {
+    transform: translateY(-2px); box-shadow: var(--shadow);
+    border-color: var(--ink-5);
+  }
+  .audience-card.dark { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .audience-card.dark:hover { border-color: var(--ink); }
+  .audience-card .age {
+    font-size: 12px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 16px; opacity: 0.6;
+  }
+  .audience-card h3 {
+    font-size: clamp(28px, 4vw, 40px); font-weight: 500;
+    letter-spacing: -0.03em; line-height: 1; margin-bottom: 16px;
+  }
+  .audience-card p {
+    font-size: 15px; line-height: 1.6; opacity: 0.75;
+    margin-bottom: 32px;
+  }
+  .audience-card .more {
+    font-size: 14px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+
+  /* ─── COURSES PAGE ─────────────────────────────────────── */
+  .page-header {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 48px;
+  }
+  .page-header h1 {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 500; letter-spacing: -0.04em; line-height: 1;
+  }
+  .page-header h1 em { font-style: italic; font-weight: 400; color: var(--ink-3); }
+  .filters {
+    display: flex; gap: 4px; margin-bottom: 32px; flex-wrap: wrap;
+    padding: 4px; background: var(--bg-soft);
+    border-radius: 999px; width: fit-content;
+  }
+  .filter {
+    padding: 8px 18px; font-size: 14px; font-weight: 500;
+    color: var(--ink-3); border-radius: 999px;
+    transition: all 150ms;
+  }
+  .filter.active { background: var(--bg); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+  .course-grid {
+    display: grid; gap: 20px;
+  }
+  @media (min-width: 640px) { .course-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1024px) { .course-grid { grid-template-columns: repeat(3, 1fr); } }
+  .course-card {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--r); overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: all 200ms;
+  }
+  .course-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--ink-5); }
+  .course-cover {
+    height: 140px; background: var(--bg-soft);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    border-bottom: 1px solid var(--line);
+  }
+  .course-cover-icon { font-size: 56px; color: var(--ink-5); }
+  .course-cover-tags {
+    position: absolute; top: 12px; left: 12px; right: 12px;
+    display: flex; justify-content: space-between;
+  }
+  .tag {
+    padding: 4px 10px; font-size: 11px; font-weight: 500;
+    border-radius: 999px; letter-spacing: 0.02em;
+  }
+  .tag-light { background: var(--bg); color: var(--ink); border: 1px solid var(--line); }
+  .tag-dark { background: var(--ink); color: var(--bg); }
+  .tag-success { background: var(--success); color: white; }
+  .tag-warn { background: var(--warn); color: white; }
+
+  .course-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .course-body h3 {
+    font-size: 18px; font-weight: 500; margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .course-instructor {
+    font-size: 12px; color: var(--ink-4); margin-bottom: 12px;
+  }
+  .course-desc {
+    font-size: 14px; color: var(--ink-3); line-height: 1.55;
+    margin-bottom: 16px; flex: 1;
+  }
+  .course-meta {
+    display: flex; gap: 16px; font-size: 12px; color: var(--ink-4);
+    margin-bottom: 16px;
+  }
+  .course-meta-item { display: flex; align-items: center; gap: 4px; }
+  .progress {
+    margin-bottom: 16px;
+  }
+  .progress-row {
+    display: flex; justify-content: space-between; font-size: 12px;
+    color: var(--ink-4); margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 4px; background: var(--bg-soft); border-radius: 999px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--ink);
+    transition: width 400ms;
+  }
+
+  /* ─── COURSE DETAIL ────────────────────────────────────── */
+  .back-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 13px; color: var(--ink-4); margin-bottom: 32px;
+    transition: color 150ms;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .course-detail-grid {
+    display: grid; gap: 40px; margin-bottom: 56px;
+  }
+  @media (min-width: 1024px) { .course-detail-grid { grid-template-columns: 2fr 1fr; gap: 60px; } }
+  .course-detail-grid .meta-row {
+    display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .course-detail h1 {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 500; letter-spacing: -0.03em; line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  .course-detail .desc {
+    font-size: 17px; color: var(--ink-3); line-height: 1.6;
+    max-width: 560px; margin-bottom: 24px;
+  }
+  .course-detail .info-row {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-size: 14px; color: var(--ink-4);
+  }
+  .course-detail .info-row > * {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .progress-card {
+    padding: 24px; border: 1px solid var(--line); border-radius: var(--r);
+    background: var(--bg);
+  }
+  .progress-card .label {
+    font-size: 12px; font-weight: 500; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+  }
+  .progress-card .big {
+    font-size: 48px; font-weight: 500; letter-spacing: -0.03em;
+    color: var(--ink); line-height: 1;
+  }
+  .progress-card .small { font-size: 14px; color: var(--ink-4); margin-top: 8px; }
+
+  .lesson-list {
+    border: 1px solid var(--line); border-radius: var(--r);
+    overflow: hidden; background: var(--bg);
+  }
+  .lesson-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px; border-bottom: 1px solid var(--line-soft);
+  }
+  .lesson-row:last-child { border-bottom: none; }
+  .lesson-row.done { background: var(--bg-alt); }
+  .lesson-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-soft); color: var(--ink-3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500; flex-shrink: 0;
+  }
+  .lesson-num.done { background: var(--success); color: white; }
+  .lesson-num.locked { color: var(--ink-5); }
+  .lesson-info { flex: 1; min-width: 0; }
+  .lesson-title { font-size: 15px; font-weight: 500; color: var(--ink); }
+  .lesson-title.locked { color: var(--ink-4); }
+  .lesson-meta { font-size: 12px; color: var(--ink-4); margin-top: 2px; }
+
+  /* ─── LESSON PLAYER ────────────────────────────────────── */
+  .lesson-player {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--r); overflow: hidden;
+  }
+  .lesson-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px; border-bottom: 1px solid var(--line);
+    background: var(--bg-alt);
+  }
+  .lesson-progress-track { height: 2px; background: var(--bg-soft); }
+  .lesson-progress-fill { height: 100%; background: var(--ink); transition: width 400ms; }
+  .lesson-content {
+    display: grid; gap: 32px; padding: 32px 24px;
+  }
+  @media (min-width: 768px) { .lesson-content { padding: 48px 40px; gap: 48px; } }
+  @media (min-width: 1024px) {
+    .lesson-content { grid-template-columns: 1.4fr 1fr; }
+  }
+  .lesson-board-wrap { display: flex; justify-content: center; align-items: flex-start; }
+  .scene-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .scene-tag.show { background: var(--bg-soft); color: var(--ink); }
+  .scene-tag.try { background: var(--ink); color: var(--bg); }
+  .scene-title {
+    font-size: clamp(24px, 3.5vw, 32px); font-weight: 500;
+    letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px;
+  }
+  .scene-text {
+    font-size: 15px; line-height: 1.65; color: var(--ink-3);
+    margin-bottom: 24px;
+  }
+  .alert {
+    padding: 14px 16px; border-radius: var(--r);
+    display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 16px; font-size: 14px;
+  }
+  .alert-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  .alert-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .alert-hint { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .alert .icon { flex-shrink: 0; margin-top: 1px; }
+  .alert .label {
+    font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+  .lesson-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ─── PUZZLES ──────────────────────────────────────────── */
+  .puzzle-stats {
+    display: flex; gap: 0; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px; background: var(--bg);
+  }
+  .puzzle-stat {
+    padding: 6px 16px;
+    border-right: 1px solid var(--line);
+  }
+  .puzzle-stat:last-child { border-right: none; }
+  .puzzle-stat-v {
+    font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .puzzle-stat-l {
+    font-size: 10px; color: var(--ink-4); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-top: 3px;
+  }
+  .puzzle-frame {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--r); padding: 32px;
+    display: grid; gap: 32px;
+  }
+  @media (min-width: 768px) { .puzzle-frame { padding: 48px; gap: 48px; } }
+  @media (min-width: 1024px) {
+    .puzzle-frame { grid-template-columns: 1.4fr 1fr; }
+  }
+  .puzzle-board-wrap { display: flex; justify-content: center; align-items: flex-start; }
+  .puzzle-prompt {
+    font-size: clamp(22px, 3vw, 30px); font-weight: 500;
+    letter-spacing: -0.02em; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .puzzle-hint-text {
+    font-size: 13px; color: var(--ink-4); margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .puzzle-tags { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; }
+  .puzzle-explanation {
+    margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid #bbf7d0;
+    font-size: 13px; line-height: 1.6; color: #166534;
+    font-style: italic;
+  }
+
+  /* ─── DASHBOARD ────────────────────────────────────────── */
+  .dash-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 24px; margin-bottom: 40px;
+  }
+  .streak-pill {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: var(--r);
+    background: var(--bg); border: 1px solid var(--line);
+  }
+  .streak-num {
+    font-size: 20px; font-weight: 500; letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .streak-label {
+    font-size: 11px; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+
+  .stats-grid {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    margin-bottom: 24px;
+  }
+  @media (min-width: 1024px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+  .stat-card {
+    padding: 24px; background: var(--bg);
+    border: 1px solid var(--line); border-radius: var(--r);
+  }
+  .stat-card-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; color: var(--ink-4);
+  }
+  .stat-card-l {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--ink-4); margin-top: 6px;
+  }
+  .stat-card-v {
+    font-size: 32px; font-weight: 500; letter-spacing: -0.02em;
+    line-height: 1; color: var(--ink);
+  }
+  .stat-card-s {
+    font-size: 12px; color: var(--ink-4); margin-top: 8px;
+  }
+
+  .panel-grid {
+    display: grid; gap: 16px; margin-bottom: 24px;
+  }
+  @media (min-width: 1024px) { .panel-grid { grid-template-columns: 1.3fr 1fr; } }
+  .panel {
+    padding: 28px; background: var(--bg);
+    border: 1px solid var(--line); border-radius: var(--r);
+  }
+  .panel-title {
+    font-size: 11px; color: var(--ink-4); text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 4px;
+  }
+  .panel-h {
+    font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+
+  /* ─── BAR CHART ────────────────────────────────────────── */
+  .bars {
+    display: flex; align-items: flex-end; justify-content: space-around;
+    height: 180px; gap: 8px; padding: 0 4px;
+  }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar {
+    width: 100%; max-width: 32px; background: var(--ink);
+    border-radius: 4px 4px 0 0;
+    transition: height 400ms;
+    position: relative;
+    min-height: 4px;
+  }
+  .bar.empty { background: var(--bg-soft); }
+  .bar-label { font-size: 11px; color: var(--ink-4); }
+  .bar-tooltip {
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg);
+    padding: 4px 8px; font-size: 11px; border-radius: 4px;
+    white-space: nowrap; opacity: 0; pointer-events: none;
+    transition: opacity 150ms; margin-bottom: 6px;
+  }
+  .bar:hover .bar-tooltip { opacity: 1; }
+
+  /* ─── RADAR ────────────────────────────────────────────── */
+  .radar { display: flex; justify-content: center; align-items: center; height: 220px; }
+  .radar svg { max-width: 100%; height: auto; }
+
+  /* ─── CONTINUE CARD ────────────────────────────────────── */
+  .continue-card {
+    padding: 24px 28px; background: var(--ink); color: var(--bg);
+    border-radius: var(--r); margin-bottom: 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .continue-card .left { display: flex; align-items: center; gap: 16px; }
+  .continue-icon {
+    width: 48px; height: 48px; border-radius: var(--r-sm);
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+  .continue-card .label-tag {
+    font-size: 11px; opacity: 0.6; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 4px;
+  }
+  .continue-card .title { font-size: 16px; font-weight: 500; margin-bottom: 2px; }
+  .continue-card .sub { font-size: 13px; opacity: 0.7; }
+  .continue-card .btn-primary { background: var(--bg); color: var(--ink); }
+  .continue-card .btn-primary:hover { background: var(--bg); transform: translateY(-1px); }
+
+  /* ─── ACTIVITY LIST ────────────────────────────────────── */
+  .activity {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--r); overflow: hidden;
+  }
+  .activity-head {
+    padding: 16px 20px; border-bottom: 1px solid var(--line);
+    background: var(--bg-alt);
+  }
+  .activity-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .activity-row:last-child { border-bottom: none; }
+  .activity-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-soft); color: var(--ink-3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .activity-text { flex: 1; font-size: 14px; }
+  .activity-text .ref { color: var(--ink-3); }
+  .activity-time { font-size: 12px; color: var(--ink-4); white-space: nowrap; }
+
+  .empty {
+    padding: 56px 24px; text-align: center;
+  }
+  .empty-icon { font-size: 48px; color: var(--ink-5); margin-bottom: 12px; }
+  .empty-title {
+    font-size: 18px; font-weight: 500; margin-bottom: 8px;
+  }
+  .empty-text { font-size: 14px; color: var(--ink-4); margin-bottom: 24px; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+  /* ─── LOGIN ────────────────────────────────────────────── */
+  .login-page {
+    max-width: 420px; margin: 0 auto;
+    padding: 80px 24px;
+  }
+  .login-head { text-align: center; margin-bottom: 40px; }
+  .login-mark {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: var(--ink); color: var(--bg);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 24px;
+  }
+  .login-head h1 {
+    font-size: 32px; font-weight: 500; letter-spacing: -0.03em;
+    line-height: 1.1; margin-bottom: 8px;
+  }
+  .login-head p { font-size: 15px; color: var(--ink-4); }
+  .form-card {
+    padding: 32px; background: var(--bg);
+    border: 1px solid var(--line); border-radius: var(--r);
+  }
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block; font-size: 12px; font-weight: 500;
+    color: var(--ink-3); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: var(--r-sm);
+    font-size: 14px; background: var(--bg);
+    transition: border-color 150ms;
+  }
+  .field input:focus { outline: none; border-color: var(--ink); }
+  .field input::placeholder { color: var(--ink-5); }
+  .form-toggle {
+    text-align: center; padding-top: 12px;
+    font-size: 13px; color: var(--ink-4);
+  }
+  .form-toggle a { color: var(--ink); text-decoration: none; font-weight: 500; }
+  .form-toggle a:hover { text-decoration: underline; }
+  .login-foot {
+    font-size: 12px; color: var(--ink-4); text-align: center;
+    margin-top: 24px; line-height: 1.6;
+  }
+
+  /* ─── FOOTER ───────────────────────────────────────────── */
+  .footer {
+    background: var(--ink); color: var(--bg); margin-top: 80px;
+    padding: 60px 0 32px;
+  }
+  .footer-grid {
+    display: grid; gap: 40px;
+    grid-template-columns: 1fr;
+    margin-bottom: 48px;
+  }
+  @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+  .footer-brand h4 {
+    font-size: 24px; font-weight: 500; letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .footer-brand p { font-size: 14px; opacity: 0.6; line-height: 1.6; max-width: 280px; }
+  .footer-col h5 {
+    font-size: 11px; font-weight: 600; opacity: 0.5;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li {
+    font-size: 14px; opacity: 0.85; margin-bottom: 10px;
+  }
+  .footer-bottom {
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    font-size: 12px; opacity: 0.5;
+  }
+
+  /* ─── LOADING ──────────────────────────────────────────── */
+  .loading {
+    min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; flex-direction: column; gap: 16px;
+  }
+  .loading-mark {
+    font-size: 40px; color: var(--ink); animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .loading-text { font-size: 13px; color: var(--ink-4); }
+
+  /* ─── UTILITIES ────────────────────────────────────────── */
+  .hidden { display: none !important; }
+  .icon-sm { width: 14px; height: 14px; }
+  .icon-md { width: 16px; height: 16px; }
+  .flex { display: flex; }
+  .gap-2 { gap: 8px; }
+  .mt-4 { margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════════
+const STORAGE_KEY = 'sd_html_v1';
+const Store = {
+  load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return { ...DEFAULT_STATE, ...JSON.parse(raw) };
+    } catch (e) {}
+    return { ...DEFAULT_STATE };
+  },
+  save(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+};
+
+const DEFAULT_STATE = {
+  user: null,
+  enrolled: [],
+  completedLessons: [],
+  solvedPuzzles: [],
+  failedPuzzles: 0,
+  activity: [],
+  totalMinutes: 0,
+  rating: 1000,
+};
+
+// ═══════════════════════════════════════════════════════════════
+// CHESS DATA
+// ═══════════════════════════════════════════════════════════════
+const FILES = ['a','b','c','d','e','f','g','h'];
+const RANKS = [8,7,6,5,4,3,2,1];
+const GLYPH = { K:'♔',Q:'♕',R:'♖',B:'♗',N:'♘',P:'♙',k:'♚',q:'♛',r:'♜',b:'♝',n:'♞',p:'♟' };
+
+const POS_START = {
+  a8:'r',b8:'n',c8:'b',d8:'q',e8:'k',f8:'b',g8:'n',h8:'r',
+  a7:'p',b7:'p',c7:'p',d7:'p',e7:'p',f7:'p',g7:'p',h7:'p',
+  a2:'P',b2:'P',c2:'P',d2:'P',e2:'P',f2:'P',g2:'P',h2:'P',
+  a1:'R',b1:'N',c1:'B',d1:'Q',e1:'K',f1:'B',g1:'N',h1:'R',
+};
+const POS_ITALIAN = {
+  // After 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5
+  a8:'r',c8:'b',d8:'q',e8:'k',h8:'r',                  // b8 knight → c6, f8 bishop → c5, g8 knight remains
+  g8:'n',
+  a7:'p',b7:'p',c7:'p',d7:'p',f7:'p',g7:'p',h7:'p',    // e7 pawn → e5
+  c6:'n', c5:'b', e5:'p',                              // black developed pieces
+  c4:'B', e4:'P', f3:'N',                              // white developed pieces
+  a2:'P',b2:'P',c2:'P',d2:'P',f2:'P',g2:'P',h2:'P',    // e2 pawn → e4, b1 knight remains, f1 bishop → c4, g1 knight → f3
+  a1:'R',b1:'N',c1:'B',d1:'Q',e1:'K',h1:'R',
+};
+
+const COURSES = [
+  { id:'intro', no:'01', title:'Satrança Giriş', audience:'kids', level:'Başlangıç',
+    instructor:'Ayşe Demir', icon:'♟',
+    desc:'Tahtayı, taşları ve temel hareketleri eğlenceli sahnelerle öğren.' },
+  { id:'opening', no:'02', title:'Açılış Prensipleri', audience:'adults', level:'Orta',
+    instructor:'Murat Kaya', icon:'♞',
+    desc:'Merkez kontrolü, gelişim, şahın güvenliği — sağlam bir başlangıç.' },
+  { id:'tactics', no:'03', title:'Taktiksel Kalıplar', audience:'adults', level:'Orta+',
+    instructor:'Selin Yılmaz', icon:'♝',
+    desc:'Çatal, şiş, çakılma. Görmeyi öğren, hesaplamayı pratikle.' },
+  { id:'endgame', no:'04', title:'Son Oyun Teknikleri', audience:'adults', level:'İleri',
+    instructor:'Hakan Aslan', icon:'♚', premium:true,
+    desc:'Şah-vezir matı, opozisyon, piyon yarışı. Klasik teknikler.' },
+];
+
+const LESSONS = {
+  intro: [
+    { id:'intro-1', title:'Tahtayı Tanıyalım', duration:8, scenes:[
+      { type:'show', title:'Satranç Tahtası',
+        text:'Tahta 8×8 = 64 kareden oluşur. Açık ve koyu kareler dönüşümlü dizilir. Sağ alt köşe daima açık karedir.',
+        position:{}, highlights:['h1','a8'] },
+      { type:'show', title:'Başlangıç Diziliş',
+        text:'Her oyuncu 16 taşla başlar: 8 piyon, 2 at, 2 fil, 2 kale, 1 vezir, 1 şah.',
+        position:POS_START, highlights:['d1','d8'] },
+      { type:'show', title:'Kareler Adıyla Çağrılır',
+        text:'Sütunlar a-h, satırlar 1-8 ile gösterilir. Beyaz şahın başlangıç karesi e1, siyah şahın e8\'dir.',
+        position:POS_START, highlights:['e1','e8'] },
+    ]},
+    { id:'intro-2', title:'Taşların Hareketi', duration:12, scenes:[
+      { type:'show', title:'Vezir — En Güçlü Taş',
+        text:'Vezir yatay, dikey ve çapraz olarak istediği kadar kare hareket eder. Tahtadaki en güçlü taştır.',
+        position:{ d4:'Q' },
+        highlights:['a4','b4','c4','e4','f4','g4','h4','d1','d2','d3','d5','d6','d7','d8','a1','b2','c3','e5','f6','g7','h8','a7','b6','c5','e3','f2','g1'] },
+      { type:'show', title:'At — Ustaca L Hareketi',
+        text:'At "L" şeklinde hareket eder: iki kare bir yöne, sonra bir kare yana. Üzerinden taş atlayabilen tek taştır.',
+        position:{ d4:'N' }, highlights:['c6','e6','b5','f5','b3','f3','c2','e2'] },
+      { type:'try', title:'Şimdi Sen — Atı Hareket Ettir',
+        text:'Beyaz atı (g1) f3 karesine getir. Önce ata, sonra hedef kareye tıkla.',
+        position:{ g1:'N', e2:'P', d2:'P' },
+        solution:{ from:'g1', to:'f3' },
+        hint:'At g1\'de. f3\'e gitmesi gerekiyor.' },
+    ]},
+    { id:'intro-3', title:'Şah, Mat ve Pat', duration:10, scenes:[
+      { type:'show', title:'Şah Çekme',
+        text:'Bir taş şahı tehdit ettiğinde "şah" denir. Şahın bu tehditten kurtulması zorunludur.',
+        position:{ e1:'K', e8:'k', e2:'Q' }, highlights:['e8','e2'] },
+      { type:'show', title:'Şah Mat',
+        text:'Şah saldırı altındadır ve hiçbir kaçış yolu yok. Oyun biter — saldıran taraf kazanır.',
+        position:{ h8:'k', g7:'Q', f6:'K' }, highlights:['h8','g7'] },
+      { type:'try', title:'Tek Hamlede Mat',
+        text:'Beyaz oynar. Kale ile siyah şahı mat et.',
+        position:{ e1:'K', a1:'R', e8:'k', f7:'p', g7:'p', h7:'p' },
+        solution:{ from:'a1', to:'a8' },
+        hint:'Son yatay matını düşün — şahın kaçabileceği yer var mı?' },
+    ]},
+  ],
+  opening: [
+    { id:'opening-1', title:'Üç Altın Kural', duration:18, scenes:[
+      { type:'show', title:'Kural 1: Merkezi Kontrol Et',
+        text:'Merkez kareleri (e4, d4, e5, d5) tahtadaki en kritik bölgedir. Buraları kontrol eden taraf üstünlük kurar.',
+        position:{ e4:'P', d4:'P' }, highlights:['e4','d4','e5','d5'] },
+      { type:'show', title:'Kural 2: Taşları Geliştir',
+        text:'Atları ve filleri hızla aktif karelere çıkar. Aynı taşı iki kez oynamaktan kaçın.',
+        position:POS_ITALIAN, highlights:['c4','f3','c5','c6'] },
+      { type:'try', title:'Atı Geliştir',
+        text:'Beyaz oynar. b1 atını c3 karesine getir — merkezi destekler.',
+        position:{
+          a8:'r',b8:'n',c8:'b',d8:'q',e8:'k',f8:'b',g8:'n',h8:'r',
+          a7:'p',b7:'p',c7:'p',d7:'p',e7:'p',f7:'p',g7:'p',h7:'p',
+          e4:'P',a2:'P',b2:'P',c2:'P',d2:'P',f2:'P',g2:'P',h2:'P',
+          a1:'R',b1:'N',c1:'B',d1:'Q',e1:'K',f1:'B',g1:'N',h1:'R',
+        },
+        solution:{ from:'b1', to:'c3' },
+        hint:'At b1\'de — merkezi destekleyen kareye git.' },
+    ]},
+    { id:'opening-2', title:'İtalyan Açılışı', duration:15, scenes:[
+      { type:'show', title:'Klasik Başlangıç',
+        text:'İtalyan Açılışı: 1.e4 e5 2.Af3 Ac6 3.Fc4. Beyaz fili f7\'ye yöneltir.',
+        position:POS_ITALIAN, highlights:['c4','f7'] },
+      { type:'try', title:'Fili Yerleştir',
+        text:'Filin doğru karesini bul: f1\'den c4\'e.',
+        position:{
+          a8:'r',c8:'b',d8:'q',e8:'k',f8:'b',g8:'n',h8:'r',
+          a7:'p',b7:'p',c7:'p',d7:'p',f7:'p',g7:'p',h7:'p',
+          e5:'p',c6:'n',e4:'P',f3:'N',
+          a2:'P',b2:'P',c2:'P',d2:'P',f2:'P',g2:'P',h2:'P',
+          a1:'R',b1:'N',c1:'B',d1:'Q',e1:'K',f1:'B',h1:'R',
+        },
+        solution:{ from:'f1', to:'c4' },
+        hint:'Fil f7\'yi hedef alacak köşeye gidiyor.' },
+    ]},
+    { id:'opening-3', title:'Açılış Hataları', duration:11, scenes:[
+      { type:'show', title:'Vezir Çıkarma Hatası',
+        text:'Vezir erken sahaya sürülürse hücumla kaybolan zaman olur. Önce küçük taşları geliştirin.',
+        position:{ h5:'Q', e4:'P' }, highlights:['h5'] },
+      { type:'show', title:'Çok Piyon Hamlesi',
+        text:'Açılışta sadece 1-2 piyon hamlesi yeterli. Fazlası taş gelişimini geciktirir.',
+        position:{ a4:'P', h4:'P', b3:'P', g3:'P' }, highlights:['a4','h4','b3','g3'] },
+    ]},
+  ],
+  tactics: [
+    { id:'tactics-1', title:'At Çatalı', duration:14, scenes:[
+      { type:'show', title:'Çatal Nedir?',
+        text:'Bir taş aynı anda iki rakip taşı tehdit ettiğinde "çatal" oluşur. At çatalları en yaygın olanıdır.',
+        position:{ e5:'N', d7:'k', f7:'q' }, highlights:['e5','d7','f7'] },
+      { type:'try', title:'Şahı ve Veziri Çatalla',
+        text:'Beyaz at f3\'te. Şah ve veziri aynı anda tehdit eden kareye git.',
+        position:{ f3:'N', d5:'k', f5:'q', e1:'K' },
+        solution:{ from:'f3', to:'e5' },
+        hint:'At "L" şeklinde hareket eder. Hangi kareden iki taşı da tehdit eder?' },
+    ]},
+    { id:'tactics-2', title:'Şiş Taktiği', duration:12, scenes:[
+      { type:'show', title:'Şiş — Tersine Çakılma',
+        text:'Önde değerli, arkada daha az değerli taş varsa şiş oluşur. Önce değerli olan kaçar, arkadaki kaybedilir.',
+        position:{ a1:'R', e8:'k', e1:'r' }, highlights:['a1','e8','e1'] },
+      { type:'try', title:'Veziri Şişle',
+        text:'Beyaz oynar. Fili kullanarak siyah şahı ve veziri şişle.',
+        position:{ f1:'B', d6:'k', a3:'q', e1:'K' },
+        solution:{ from:'f1', to:'b5' },
+        hint:'Filini şahı çekecek diyagonale yerleştir — vezir arkada sıkışsın.' },
+    ]},
+    { id:'tactics-3', title:'Çakılma', duration:10, scenes:[
+      { type:'show', title:'Mutlak Çakılma',
+        text:'Bir taş hareket ederse arkasındaki şah açığa çıkacaksa — o taş çakılıdır, kıpırdayamaz.',
+        position:{ e1:'K', e4:'B', e7:'p', e8:'k' }, highlights:['e4','e7','e8'] },
+    ]},
+  ],
+};
+
+const PUZZLES = [
+  { id:'p1', difficulty:'Kolay', topic:'Mat in 1',
+    position:{ e1:'K', a1:'R', e8:'k', f7:'p', g7:'p', h7:'p' },
+    prompt:'Beyaz oynar, tek hamlede mat.',
+    hint:'Son yatay matı. Şahın kaçacak yeri var mı?',
+    solution:{ from:'a1', to:'a8' },
+    explanation:'Kale 8. yataya ulaşır, siyah piyonlar şahın kaçışını engellediği için mat olur.' },
+  { id:'p2', difficulty:'Kolay', topic:'Mat in 1',
+    position:{ f6:'K', h6:'Q', h8:'k' },
+    prompt:'Beyaz oynar, tek hamlede mat.',
+    hint:'Vezir şahla yan yana, ama arkada destek var mı?',
+    solution:{ from:'h6', to:'g7' },
+    explanation:'Vezir g7\'ye gider — beyaz şah onu koruduğu için alınamaz. Mat.' },
+  { id:'p3', difficulty:'Orta', topic:'Çatal',
+    position:{ e1:'K', e5:'N', a8:'r', h8:'r', g6:'k' },
+    prompt:'Beyaz oynar, kaleyi kazan.',
+    hint:'At iki kaleyi birden tehdit edebilir mi?',
+    solution:{ from:'e5', to:'f7' },
+    explanation:'At f7\'ye atlar — siyah şahla bir kaleyi aynı anda tehdit eder.' },
+  { id:'p4', difficulty:'Orta', topic:'Şiş',
+    position:{ f1:'B', d6:'k', a3:'q', e1:'K', h1:'R' },
+    prompt:'Beyaz oynar, veziri kazan.',
+    hint:'Fili öyle bir kareye koy ki, şah çekilsin ve vezir arkada kalsın.',
+    solution:{ from:'f1', to:'b5' },
+    explanation:'Fil b5\'e gider, şahı çeker. Şah hareket etmek zorunda — fil sonra a3\'teki veziri alır.' },
+  { id:'p5', difficulty:'Kolay', topic:'Çatal',
+    position:{ d4:'Q', a7:'r', g7:'r', e1:'K', e8:'k' },
+    prompt:'Beyaz oynar, bir kaleyi kazan.',
+    hint:'Vezir uzun mesafede iki taşı birden tehdit edebilir.',
+    solution:{ from:'d4', to:'d7' },
+    explanation:'Vezir d7\'ye gelir — şahı tehdit eder ve a7\'deki kaleye saldırır.' },
+  { id:'p6', difficulty:'İleri', topic:'Çakılma',
+    position:{ e1:'K', e4:'R', e7:'q', e8:'k' },
+    prompt:'Beyaz oynar, veziri kazan.',
+    hint:'Vezir çakılı olduğu için kaçamaz.',
+    solution:{ from:'e4', to:'e7' },
+    explanation:'Kale çakılı veziri alır. Vezir hareket edemezdi çünkü arkasında şah var.' },
+  { id:'p7', difficulty:'İleri', topic:'Çift Tehdit',
+    position:{ c1:'K', c4:'B', f7:'k', a8:'r' },
+    prompt:'Beyaz oynar, kaleyi kazan.',
+    hint:'Fil hem şahı hem kaleyi aynı diyagonalde görebilir mi?',
+    solution:{ from:'c4', to:'d5' },
+    explanation:'Fil d5\'e gelir. Şah-kale aynı çapraz üzerinde — şah çekildiği için kaçınca kale alınır.' },
+  { id:'p8', difficulty:'Orta+', topic:'Mat in 1',
+    position:{ g1:'K', g6:'Q', g8:'k', h7:'p', f7:'p' },
+    prompt:'Beyaz oynar, tek hamlede mat.',
+    hint:'Vezir şaha yaklaşırsa neresi mat olur?',
+    solution:{ from:'g6', to:'g7' },
+    explanation:'Vezir g7\'ye gider — beyaz şahın desteğiyle mat. Siyah şah hiçbir kareye kaçamaz.' },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// ICONS (inline SVG)
+// ═══════════════════════════════════════════════════════════════
+const Icon = {
+  arrow: '<svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
+  arrowLeft: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
+  check: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  checkCircle: '<svg class="icon-md" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  x: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  menu: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+  close: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  book: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  clock: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  trophy: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>',
+  flame: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+  zap: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  bulb: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
+  lock: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+  rotate: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+  logout: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+  play: '<svg class="icon-md" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+  target: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>',
+  trending: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+  graduation: '<svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+  calendar: '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+};
+
+// ═══════════════════════════════════════════════════════════════
+// APP STATE & ROUTER
+// ═══════════════════════════════════════════════════════════════
+let state = Store.load();
+let view = 'home';
+let activeCourseId = null;
+let activeLesson = null;
+let activeSceneIdx = 0;
+let activePuzzleIdx = 0;
+let mobileNavOpen = false;
+let courseFilter = 'all';
+let loginMode = 'login';
+let loginErr = '';
+
+// scene/puzzle local state
+let scenePos = null;
+let sceneSelected = null;
+let sceneFeedback = null;
+let sceneSolved = false;
+let sceneShowHint = false;
+
+let puzzlePos = null;
+let puzzleSelected = null;
+let puzzleSolved = false;
+let puzzleFeedback = null;
+let puzzleShowHint = false;
+let puzzleAttempts = 0;
+
+function updateState(updater) {
+  state = typeof updater === 'function' ? updater(state) : { ...state, ...updater };
+  Store.save(state);
+  render();
+}
+
+function setView(v) {
+  view = v;
+  mobileNavOpen = false;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  render();
+}
+
+function openCourse(id) {
+  activeCourseId = id;
+  setView('course');
+}
+
+function openLesson(lesson, courseId) {
+  activeLesson = lesson;
+  activeSceneIdx = 0;
+  if (courseId) activeCourseId = courseId;
+  initSceneState();
+  setView('lesson');
+}
+
+function initSceneState() {
+  const scene = activeLesson.scenes[activeSceneIdx];
+  scenePos = { ...scene.position };
+  sceneSelected = null;
+  sceneFeedback = null;
+  sceneSolved = scene.type !== 'try';
+  sceneShowHint = false;
+}
+
+function initPuzzleState() {
+  const p = PUZZLES[activePuzzleIdx];
+  puzzlePos = { ...p.position };
+  puzzleSelected = null;
+  puzzleSolved = state.solvedPuzzles.includes(p.id);
+  puzzleFeedback = null;
+  puzzleShowHint = false;
+  puzzleAttempts = 0;
+}
+
+function logout() {
+  updateState(s => ({ ...s, user: null }));
+  setView('home');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════════════
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function isUpper(c) { return c && c === c.toUpperCase(); }
+function fmtMin(m) {
+  if (m >= 60) return (Math.round(m / 6) / 10) + ' sa';
+  return m + ' dk';
+}
+function timeAgo(ts) {
+  const h = (Date.now() - ts) / 36e5;
+  if (h < 1) return Math.max(1, Math.round(h * 60)) + ' dk önce';
+  if (h < 24) return Math.round(h) + ' sa önce';
+  return Math.round(h / 24) + ' gün önce';
+}
+function courseProgress(id) {
+  const lessons = LESSONS[id] || [];
+  if (!lessons.length) return 0;
+  const done = lessons.filter(l => state.completedLessons.includes(l.id)).length;
+  return Math.round((done / lessons.length) * 100);
+}
+function calcStreak() {
+  if (!state.activity.length) return 0;
+  const dates = new Set(state.activity.map(a => new Date(a.ts).toDateString()));
+  let s = 0; let d = new Date();
+  while (dates.has(d.toDateString())) { s++; d.setDate(d.getDate() - 1); }
+  return s;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BOARD RENDERER
+// ═══════════════════════════════════════════════════════════════
+function renderBoard(opts) {
+  const { position, selected, highlights = [], onClick } = opts;
+  let html = '<div class="board"><div class="board-grid">';
+  for (const r of RANKS) {
+    for (const f of FILES) {
+      const sq = f + r;
+      const isLight = (FILES.indexOf(f) + r) % 2 === 1;
+      const piece = position[sq];
+      const isWhite = piece && isUpper(piece);
+      const cls = ['square', isLight ? 'light' : 'dark'];
+      if (onClick) cls.push('clickable');
+      if (selected === sq) cls.push('selected');
+      if (highlights.includes(sq)) cls.push('highlight');
+      const handler = onClick ? `data-board-click="${onClick}" data-square="${sq}"` : '';
+      html += `<button class="${cls.join(' ')}" ${handler}>`;
+      if (f === 'a') html += `<span class="coord coord-rank">${r}</span>`;
+      if (r === 1) html += `<span class="coord coord-file">${f}</span>`;
+      if (piece) {
+        html += `<span class="piece ${isWhite ? 'white' : 'black'}">${GLYPH[piece]}</span>`;
+      }
+      html += '</button>';
+    }
+  }
+  html += '</div></div>';
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// VIEWS
+// ═══════════════════════════════════════════════════════════════
+function navView() {
+  const items = [
+    { k: 'home', l: 'Ana Sayfa' },
+    { k: 'courses', l: 'Dersler' },
+    { k: 'puzzles', l: 'Bulmacalar' },
+  ];
+  if (state.user) items.push({ k: 'dashboard', l: 'Panelim' });
+
+  const links = items.map(i =>
+    `<button class="nav-link ${view === i.k ? 'active' : ''}" data-route="${i.k}">${i.l}</button>`
+  ).join('');
+
+  const userArea = state.user ? `
+    <button class="user-pill" data-route="dashboard">
+      <div class="avatar">${escapeHtml(state.user.name.charAt(0).toUpperCase())}</div>
+      <span class="user-name">${escapeHtml(state.user.name.split(' ')[0])}</span>
+    </button>
+    <button class="btn btn-icon btn-soft" data-action="logout" title="Çıkış">${Icon.logout}</button>
+  ` : `
+    <button class="btn btn-primary btn-sm" data-route="login">Giriş yap</button>
+  `;
+
+  const mobileLinks = items.map(i =>
+    `<a href="#" data-route="${i.k}" class="${view === i.k ? 'active' : ''}">${i.l}</a>`
+  ).join('') + (state.user
+    ? `<a href="#" data-action="logout" style="color:var(--ink-4);display:flex;align-items:center;gap:8px;">${Icon.logout} Çıkış yap</a>`
+    : `<a href="#" data-route="login" style="color:var(--ink);font-weight:600;">Giriş yap →</a>`);
+
+  return `
+    <nav class="nav">
+      <div class="container">
+        <div class="nav-inner">
+          <button class="logo" data-route="home">
+            <span class="logo-mark">♞</span>
+            <span>satrancdersleri.com</span>
+          </button>
+          <div class="nav-links">${links}</div>
+          <div class="nav-actions">
+            ${userArea}
+            <button class="btn btn-icon btn-soft nav-burger" data-action="toggle-nav">
+              ${mobileNavOpen ? Icon.close : Icon.menu}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="nav-mobile ${mobileNavOpen ? 'open' : ''}">${mobileLinks}</div>
+    </nav>
+  `;
+}
+
+function homeView() {
+  const totalLessons = Object.values(LESSONS).reduce((s, l) => s + l.length, 0);
+  return `
+    <section class="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">64 kare · sonsuz olasılık</div>
+            <h1>Kraliyet oyununu<br><em>ustalardan</em> öğren.</h1>
+            <p class="lead">Yedi yaşından yetmişine — yapılandırılmış etkileşimli dersler, uygulamalı anlatımlar ve düzinelerce bulmaca. Tarayıcıdan, kayıtsız başla.</p>
+            <div class="hero-actions">
+              <button class="btn btn-primary btn-lg" data-route="courses">
+                Derslere göz at ${Icon.arrow}
+              </button>
+              <button class="btn btn-ghost btn-lg" data-route="puzzles">
+                Bulmaca dene
+              </button>
+            </div>
+            <div class="hero-stats">
+              <div>
+                <div class="stat-num">${totalLessons}</div>
+                <div class="stat-label">Etkileşimli ders</div>
+              </div>
+              <div>
+                <div class="stat-num">${PUZZLES.length}</div>
+                <div class="stat-label">Bulmaca</div>
+              </div>
+              <div>
+                <div class="stat-num">4.9</div>
+                <div class="stat-label">Üye puanı</div>
+              </div>
+            </div>
+          </div>
+          <div class="hero-board-wrap">
+            ${renderBoard({ position: POS_ITALIAN })}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="eyebrow">Yöntem</div>
+        <h2>Sadece izlemiyorsun —<br><em>oynayarak</em> öğreniyorsun.</h2>
+        <p class="section-lead">Geleneksel videolar bilgi aktarır ama satranç pasif izlemeyle öğrenilmez. Her dersimiz etkileşimli sahnelerden oluşur: pozisyonu görürsün, anlatımı okursun, sonra kendin oynarsın.</p>
+
+        <div class="features">
+          ${[
+            { i: Icon.play, t: 'Etkileşimli dersler', d: 'Sahne sahne pozisyonlar, anlatımlar ve sıra-sende soruları.' },
+            { i: Icon.target, t: 'Uygulamalı anlatım', d: 'Hocayla aynı hamleyi tahta üzerinde sen de yap.' },
+            { i: Icon.spark, t: 'Soru çözümleri', d: 'Düzinelerce bulmaca. Çatal, şiş, çakılma, mat kalıpları.' },
+            { i: Icon.trending, t: 'İlerleme takibi', d: 'Hangi konuda iyisin, nerede zayıfsın — kişisel rapor.' },
+          ].map(f => `
+            <div class="feature">
+              <div class="feature-icon">${f.i}</div>
+              <h3>${f.t}</h3>
+              <p>${f.d}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="eyebrow">İki yol</div>
+        <h2>Yaşına göre,<br><em>seviyene</em> göre.</h2>
+
+        <div class="audiences" style="margin-top: 56px;">
+          <button class="audience-card dark" data-route="courses">
+            <div class="age">7 — 14 yaş</div>
+            <h3>Çocuklar için</h3>
+            <p>Renkli, hikâyeli, oyunlaştırılmış sahneler. Her bölüm sonunda sıra-sende soruları.</p>
+            <span class="more">Çocuk koleksiyonu ${Icon.arrow}</span>
+          </button>
+          <button class="audience-card" data-route="courses">
+            <div class="age">15+ yaş</div>
+            <h3>Yetişkinler için</h3>
+            <p>Ciddi tempolu derinlemesine analiz. Açılış repertuarından son oyuna.</p>
+            <span class="more">Yetişkin koleksiyonu ${Icon.arrow}</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function coursesView() {
+  const filtered = courseFilter === 'all' ? COURSES : COURSES.filter(c => c.audience === courseFilter);
+  return `
+    <div class="container">
+      <div class="page-header">
+        <div class="eyebrow">Katalog</div>
+        <h1>Tüm <em>dersler</em></h1>
+      </div>
+
+      <div class="filters">
+        ${[
+          { k: 'all', l: 'Tümü' },
+          { k: 'kids', l: 'Çocuklar' },
+          { k: 'adults', l: 'Yetişkinler' },
+        ].map(f => `
+          <button class="filter ${courseFilter === f.k ? 'active' : ''}" data-filter="${f.k}">${f.l}</button>
+        `).join('')}
+      </div>
+
+      <div class="course-grid">
+        ${filtered.map(c => {
+          const lessons = LESSONS[c.id] || [];
+          const enrolled = state.enrolled.includes(c.id);
+          const progress = courseProgress(c.id);
+          const totalMin = lessons.reduce((s, l) => s + l.duration, 0);
+          const audienceLabel = c.audience === 'kids' ? 'Çocuk' : 'Yetişkin';
+
+          let cta;
+          if (c.premium) {
+            cta = `<button class="btn btn-soft" disabled>${Icon.lock} Yakında</button>`;
+          } else if (enrolled) {
+            const label = progress === 100 ? 'Yeniden çalış' : progress > 0 ? 'Devam et' : 'Başla';
+            cta = `<button class="btn btn-primary" data-open-course="${c.id}">${label} ${Icon.arrow}</button>`;
+          } else {
+            cta = `<button class="btn btn-ghost" data-enroll="${c.id}">Kursa kayıt ol ${Icon.arrow}</button>`;
+          }
+
+          return `
+            <div class="course-card">
+              <div class="course-cover">
+                <div class="course-cover-tags">
+                  <span class="tag tag-light">${c.level}</span>
+                  <span class="tag ${c.audience === 'kids' ? 'tag-success' : 'tag-dark'}">${audienceLabel}</span>
+                </div>
+                <span class="course-cover-icon">${c.icon}</span>
+              </div>
+              <div class="course-body">
+                <h3>${escapeHtml(c.title)}</h3>
+                <div class="course-instructor">${escapeHtml(c.instructor)}</div>
+                <p class="course-desc">${escapeHtml(c.desc)}</p>
+                <div class="course-meta">
+                  <span class="course-meta-item">${Icon.book} ${lessons.length || '—'} ders</span>
+                  <span class="course-meta-item">${Icon.clock} ${totalMin || '—'} dk</span>
+                </div>
+                ${enrolled && progress > 0 ? `
+                  <div class="progress">
+                    <div class="progress-row"><span>İlerleme</span><span>%${progress}</span></div>
+                    <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+                  </div>
+                ` : ''}
+                ${cta}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function courseView() {
+  const course = COURSES.find(c => c.id === activeCourseId);
+  if (!course) return '<div class="container"><p>Kurs bulunamadı.</p></div>';
+  const lessons = LESSONS[activeCourseId] || [];
+  const completed = lessons.filter(l => state.completedLessons.includes(l.id)).length;
+  const progress = lessons.length ? Math.round((completed / lessons.length) * 100) : 0;
+  const totalMin = lessons.reduce((s, l) => s + l.duration, 0);
+
+  return `
+    <div class="container" style="padding-top: 40px;">
+      <button class="back-link" data-route="courses">${Icon.arrowLeft} Tüm dersler</button>
+
+      <div class="course-detail-grid">
+        <div class="course-detail">
+          <div class="meta-row">
+            <span class="tag tag-dark">${course.level}</span>
+            <span class="tag tag-light">${course.audience === 'kids' ? 'Çocuk' : 'Yetişkin'}</span>
+          </div>
+          <h1>${escapeHtml(course.title)}</h1>
+          <p class="desc">${escapeHtml(course.desc)}</p>
+          <div class="info-row">
+            <span>${Icon.graduation} ${escapeHtml(course.instructor)}</span>
+            <span>${Icon.book} ${lessons.length} ders</span>
+            <span>${Icon.clock} ${totalMin} dakika</span>
+          </div>
+        </div>
+        <div>
+          <div class="progress-card">
+            <div class="label">İlerlemen</div>
+            <div class="big">%${progress}</div>
+            <div class="small">${completed} / ${lessons.length} ders</div>
+            <div class="progress-bar" style="margin-top:16px;">
+              <div class="progress-fill" style="width:${progress}%"></div>
+            </div>
+            ${progress === 100 ? `
+              <div class="alert alert-success" style="margin-top:16px;margin-bottom:0;">
+                <span class="icon">${Icon.trophy}</span>
+                <div>Kursu tamamladın!</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+
+      <h2 style="font-size:24px;font-weight:500;letter-spacing:-0.02em;margin-bottom:20px;">Ders içeriği</h2>
+
+      <div class="lesson-list">
+        ${lessons.map((l, idx) => {
+          const done = state.completedLessons.includes(l.id);
+          const prevDone = idx === 0 || state.completedLessons.includes(lessons[idx - 1].id);
+          const locked = !prevDone && !done;
+          const numCls = done ? 'done' : locked ? 'locked' : '';
+          const numContent = done ? Icon.check : locked ? Icon.lock : (idx + 1);
+          const btn = locked
+            ? `<button class="btn btn-soft btn-sm" disabled>${Icon.lock} Kilitli</button>`
+            : done
+              ? `<button class="btn btn-ghost btn-sm" data-open-lesson="${l.id}">${Icon.rotate} Tekrar</button>`
+              : `<button class="btn btn-primary btn-sm" data-open-lesson="${l.id}">Başla ${Icon.arrow}</button>`;
+
+          return `
+            <div class="lesson-row ${done ? 'done' : ''}">
+              <div class="lesson-num ${numCls}">${numContent}</div>
+              <div class="lesson-info">
+                <div class="lesson-title ${locked ? 'locked' : ''}">${escapeHtml(l.title)}</div>
+                <div class="lesson-meta">${l.scenes.length} sahne · ${l.duration} dakika${done ? ' · Tamamlandı' : ''}</div>
+              </div>
+              ${btn}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function lessonView() {
+  if (!activeLesson) return '<div class="container"><p>Ders bulunamadı.</p></div>';
+  const scene = activeLesson.scenes[activeSceneIdx];
+  const isLast = activeSceneIdx === activeLesson.scenes.length - 1;
+  const progress = ((activeSceneIdx + (sceneSolved ? 1 : 0)) / activeLesson.scenes.length) * 100;
+
+  let alertHtml = '';
+  if (sceneFeedback?.type === 'success') {
+    alertHtml = `<div class="alert alert-success">
+      <span class="icon">${Icon.checkCircle}</span><div>${escapeHtml(sceneFeedback.msg)}</div>
+    </div>`;
+  } else if (sceneFeedback?.type === 'error') {
+    alertHtml = `<div class="alert alert-error">
+      <span class="icon">${Icon.x}</span><div>${escapeHtml(sceneFeedback.msg)}</div>
+    </div>`;
+  }
+  if (sceneShowHint && scene.hint) {
+    alertHtml += `<div class="alert alert-hint">
+      <span class="icon">${Icon.bulb}</span>
+      <div><div class="label">İpucu</div>${escapeHtml(scene.hint)}</div>
+    </div>`;
+  }
+
+  let actions = '';
+  if (activeSceneIdx > 0) {
+    actions += `<button class="btn btn-ghost btn-sm" data-action="scene-prev">${Icon.arrowLeft} Önceki</button>`;
+  }
+  if (scene.type === 'try' && !sceneSolved && !sceneShowHint) {
+    actions += `<button class="btn btn-soft btn-sm" data-action="scene-hint">${Icon.bulb} İpucu</button>`;
+  }
+  if (scene.type === 'show' || sceneSolved) {
+    actions += `<button class="btn btn-primary" data-action="scene-next">${
+      isLast ? `${Icon.check} Dersi tamamla` : `Sonraki sahne ${Icon.arrow}`
+    }</button>`;
+  }
+
+  const clickable = scene.type === 'try' && !sceneSolved;
+
+  return `
+    <div class="container" style="padding-top: 32px; padding-bottom: 32px;">
+      <div class="lesson-player">
+        <div class="lesson-bar">
+          <button class="back-link" style="margin:0;" data-action="lesson-exit">${Icon.arrowLeft} Çıkış</button>
+          <div style="font-size:12px;color:var(--ink-4);text-transform:uppercase;letter-spacing:0.06em;">
+            Sahne ${activeSceneIdx + 1} / ${activeLesson.scenes.length}
+          </div>
+          <div style="font-size:14px;font-weight:600;">%${Math.round(progress)}</div>
+        </div>
+        <div class="lesson-progress-track">
+          <div class="lesson-progress-fill" style="width:${progress}%"></div>
+        </div>
+        <div class="lesson-content">
+          <div class="lesson-board-wrap">
+            ${renderBoard({
+              position: scenePos,
+              selected: sceneSelected,
+              highlights: sceneSolved ? [] : (scene.highlights || []),
+              onClick: clickable ? 'scene' : null,
+            })}
+          </div>
+          <div>
+            <div class="scene-tag ${scene.type === 'try' ? 'try' : 'show'}">
+              ${scene.type === 'try' ? `${Icon.target} Sıra Sende` : `${Icon.book} Anlatım`}
+            </div>
+            <h2 class="scene-title">${escapeHtml(scene.title)}</h2>
+            <p class="scene-text">${escapeHtml(scene.text)}</p>
+            ${alertHtml}
+            <div class="lesson-actions">${actions}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function puzzlesView() {
+  const p = PUZZLES[activePuzzleIdx];
+  const totalSolved = state.solvedPuzzles.length;
+  const totalAttempts = totalSolved + state.failedPuzzles;
+  const accuracy = totalAttempts > 0 ? Math.round((totalSolved / totalAttempts) * 100) : 100;
+
+  let diffTag;
+  if (p.difficulty === 'Kolay') diffTag = 'tag-success';
+  else if (p.difficulty === 'Orta') diffTag = 'tag-warn';
+  else diffTag = 'tag-dark';
+
+  let alertHtml = '';
+  if (puzzleFeedback?.type === 'success') {
+    alertHtml = `<div class="alert alert-success">
+      <span class="icon">${Icon.checkCircle}</span>
+      <div>
+        <div class="label">Çözüldü</div>
+        ${escapeHtml(puzzleFeedback.msg)}
+        <div class="puzzle-explanation">${escapeHtml(p.explanation)}</div>
+      </div>
+    </div>`;
+  } else if (puzzleFeedback?.type === 'error') {
+    alertHtml = `<div class="alert alert-error">
+      <span class="icon">${Icon.x}</span>
+      <div>${escapeHtml(puzzleFeedback.msg)}${puzzleAttempts >= 2 ? '<div style="font-size:12px;margin-top:4px;opacity:0.7;">İpucunu açmayı dene.</div>' : ''}</div>
+    </div>`;
+  }
+  if (puzzleShowHint && !puzzleSolved) {
+    alertHtml += `<div class="alert alert-hint">
+      <span class="icon">${Icon.bulb}</span>
+      <div><div class="label">İpucu</div>${escapeHtml(p.hint)}</div>
+    </div>`;
+  }
+
+  let actions = '';
+  if (!puzzleSolved && !puzzleShowHint) {
+    actions += `<button class="btn btn-soft btn-sm" data-action="puzzle-hint">${Icon.bulb} İpucu</button>`;
+  }
+  if (!puzzleSolved) {
+    actions += `<button class="btn btn-ghost btn-sm" data-action="puzzle-reset">${Icon.rotate} Sıfırla</button>`;
+  }
+  actions += `<button class="btn btn-ghost btn-icon btn-sm" data-action="puzzle-prev">${Icon.arrowLeft}</button>`;
+  actions += `<button class="btn btn-primary btn-sm" data-action="puzzle-next" style="flex:1;">Sonraki ${Icon.arrow}</button>`;
+
+  return `
+    <div class="container" style="padding-top: 40px;">
+      <div class="dash-header">
+        <div>
+          <div class="eyebrow">Bulmaca ${activePuzzleIdx + 1} / ${PUZZLES.length}</div>
+          <h1 style="font-size:clamp(32px,5vw,52px);font-weight:500;letter-spacing:-0.03em;line-height:1.05;">
+            <em style="font-style:italic;color:var(--ink-3);font-weight:400;">Çöz</em>, öğren, ilerle.
+          </h1>
+        </div>
+        <div class="puzzle-stats">
+          <div class="puzzle-stat">
+            <div class="puzzle-stat-v">${totalSolved}</div>
+            <div class="puzzle-stat-l">Çözülen</div>
+          </div>
+          <div class="puzzle-stat">
+            <div class="puzzle-stat-v">%${accuracy}</div>
+            <div class="puzzle-stat-l">Doğruluk</div>
+          </div>
+          <div class="puzzle-stat">
+            <div class="puzzle-stat-v">${state.rating.toLocaleString('tr-TR')}</div>
+            <div class="puzzle-stat-l">Puan</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="puzzle-frame">
+        <div class="puzzle-board-wrap">
+          ${renderBoard({
+            position: puzzlePos,
+            selected: puzzleSelected,
+            highlights: puzzleSolved && puzzleFeedback ? [p.solution.to] : [],
+            onClick: puzzleSolved ? null : 'puzzle',
+          })}
+        </div>
+        <div>
+          <div class="puzzle-tags">
+            <span class="tag ${diffTag}">${p.difficulty}</span>
+            <span style="font-size:12px;color:var(--ink-4);text-transform:uppercase;letter-spacing:0.06em;">${p.topic}</span>
+          </div>
+          <p class="puzzle-prompt">${escapeHtml(p.prompt)}</p>
+          <p class="puzzle-hint-text">
+            Önce <strong style="color:var(--ink);">beyaz taşa</strong>, sonra <strong style="color:var(--ink);">hedef kareye</strong> tıkla.
+          </p>
+          ${alertHtml}
+          <div class="lesson-actions" style="margin-top:16px;">${actions}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function dashboardView() {
+  const totalLessonsAvail = Object.values(LESSONS).reduce((s, l) => s + l.length, 0);
+  const completed = state.completedLessons.length;
+  const enrolled = state.enrolled.length;
+  const solved = state.solvedPuzzles.length;
+  const streak = calcStreak();
+
+  // Weekly bar data
+  const days = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'];
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay());
+  weekStart.setHours(0, 0, 0, 0);
+  const weekly = days.map((d, i) => {
+    const start = new Date(weekStart);
+    start.setDate(weekStart.getDate() + i);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 1);
+    const dk = state.activity
+      .filter(a => a.ts >= start.getTime() && a.ts < end.getTime() && a.type === 'lesson_complete')
+      .reduce((s, a) => s + (a.minutes || 0), 0);
+    return { d, dk };
+  });
+  const maxDk = Math.max(1, ...weekly.map(w => w.dk));
+
+  // Skills
+  const skillMap = { 'Açılış':0, 'Taktik':0, 'Son Oyun':0, 'Strateji':0, 'Mat':0, 'Hesaplama':0 };
+  state.completedLessons.forEach(lid => {
+    if (lid.startsWith('opening')) skillMap['Açılış'] += 25;
+    if (lid.startsWith('tactics')) skillMap['Taktik'] += 20;
+    if (lid.startsWith('endgame')) skillMap['Son Oyun'] += 25;
+    if (lid.startsWith('intro')) skillMap['Strateji'] += 10;
+  });
+  state.solvedPuzzles.forEach(pid => {
+    const p = PUZZLES.find(x => x.id === pid);
+    if (!p) return;
+    if (p.topic.includes('Mat')) skillMap['Mat'] += 12;
+    if (['Çatal','Şiş','Çakılma','Çift'].some(x => p.topic.includes(x))) skillMap['Taktik'] += 10;
+    skillMap['Hesaplama'] += 6;
+  });
+  const skills = Object.entries(skillMap).map(([k, v]) => ({ skill: k, value: Math.min(100, v) }));
+
+  // Continue
+  let continueLesson = null;
+  for (const cid of state.enrolled) {
+    const lessons = LESSONS[cid] || [];
+    const next = lessons.find(l => !state.completedLessons.includes(l.id));
+    if (next) { continueLesson = { courseId: cid, lesson: next, course: COURSES.find(c => c.id === cid) }; break; }
+  }
+
+  // Bars
+  const barsHtml = weekly.map(w => {
+    const h = (w.dk / maxDk) * 160;
+    return `
+      <div class="bar-col">
+        <div class="bar ${w.dk === 0 ? 'empty' : ''}" style="height:${Math.max(4, h)}px">
+          ${w.dk > 0 ? `<div class="bar-tooltip">${w.dk} dk</div>` : ''}
+        </div>
+        <div class="bar-label">${w.d}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Radar SVG
+  const cx = 120, cy = 110, R = 80;
+  const n = skills.length;
+  const ringPaths = [0.25, 0.5, 0.75, 1].map(scale => {
+    const r = R * scale;
+    const pts = Array.from({ length: n }, (_, i) => {
+      const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    });
+    return `<polygon points="${pts.map(p => p.join(',')).join(' ')}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+  }).join('');
+
+  const dataPts = skills.map((s, i) => {
+    const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+    const r = (R * s.value) / 100;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  });
+  const labels = skills.map((s, i) => {
+    const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+    const r = R + 18;
+    const x = cx + r * Math.cos(a);
+    const y = cy + r * Math.sin(a);
+    let anchor = 'middle';
+    if (Math.cos(a) > 0.5) anchor = 'start';
+    else if (Math.cos(a) < -0.5) anchor = 'end';
+    return `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" font-size="10" fill="var(--ink-4)">${s.skill}</text>`;
+  }).join('');
+
+  const radarSvg = `
+    <svg viewBox="0 0 240 220" width="100%" height="100%">
+      ${ringPaths}
+      ${labels}
+      <polygon points="${dataPts.map(p => p.join(',')).join(' ')}"
+        fill="rgba(10,10,10,0.1)" stroke="var(--ink)" stroke-width="2"/>
+      ${dataPts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--ink)"/>`).join('')}
+    </svg>
+  `;
+
+  // Activity
+  let activityHtml;
+  if (!state.activity.length) {
+    activityHtml = `<div class="empty">
+      <div class="empty-icon">⌛</div>
+      <div class="empty-title">Henüz aktivite yok</div>
+      <div class="empty-text">Bir derse veya bulmacaya başla — burada görünecek.</div>
+    </div>`;
+  } else {
+    activityHtml = state.activity.slice(0, 8).map(a => {
+      let cfg;
+      if (a.type === 'lesson_complete') cfg = { i: Icon.checkCircle, t: 'Ders tamamlandı' };
+      else if (a.type === 'puzzle_solve') cfg = { i: Icon.trophy, t: 'Bulmaca çözüldü' };
+      else if (a.type === 'enroll') cfg = { i: Icon.book, t: 'Yeni kursa kayıt' };
+      else cfg = { i: Icon.zap, t: 'Aktivite' };
+      return `
+        <div class="activity-row">
+          <div class="activity-icon">${cfg.i}</div>
+          <div class="activity-text">${cfg.t} · <span class="ref">${escapeHtml(a.label || '')}</span></div>
+          <div class="activity-time">${timeAgo(a.ts)}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  return `
+    <div class="container" style="padding-top: 40px; padding-bottom: 60px;">
+      <div class="dash-header">
+        <div>
+          <div class="eyebrow">Üye Paneli</div>
+          <h1 style="font-size:clamp(36px,5vw,56px);font-weight:500;letter-spacing:-0.03em;line-height:1.05;">
+            Hoş geldin,<br><em style="font-style:italic;color:var(--ink-3);font-weight:400;">${escapeHtml(state.user?.name?.split(' ')[0] || 'Misafir')}</em>.
+          </h1>
+        </div>
+        <div class="streak-pill">
+          <span style="color:${streak > 0 ? 'var(--warn)' : 'var(--ink-5)'};">${Icon.flame}</span>
+          <div>
+            <div class="streak-num">${streak} gün</div>
+            <div class="streak-label">Çalışma serisi</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        ${[
+          { i: Icon.book, l: 'Tamamlanan ders', v: completed, s: `${totalLessonsAvail - completed} kaldı` },
+          { i: Icon.clock, l: 'Toplam çalışma', v: fmtMin(state.totalMinutes), s: 'Etkin süre' },
+          { i: Icon.trophy, l: 'Bulmaca puanı', v: state.rating.toLocaleString('tr-TR'), s: `${solved} bulmaca` },
+          { i: Icon.graduation, l: 'Kayıtlı kurs', v: enrolled, s: `${COURSES.length - enrolled} mevcut` },
+        ].map(s => `
+          <div class="stat-card">
+            <div class="stat-card-top">${s.i}</div>
+            <div class="stat-card-v">${s.v}</div>
+            <div class="stat-card-l">${s.l}</div>
+            <div class="stat-card-s">${s.s}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="panel-grid">
+        <div class="panel">
+          <div class="panel-title">Bu hafta</div>
+          <div class="panel-h">Çalışma süresi (dakika)</div>
+          <div class="bars">${barsHtml}</div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Yetkinlik haritası</div>
+          <div class="panel-h">Güçlü ve zayıf yönler</div>
+          <div class="radar">${radarSvg}</div>
+        </div>
+      </div>
+
+      ${continueLesson ? `
+        <div class="continue-card">
+          <div class="left">
+            <div class="continue-icon">${continueLesson.course.icon}</div>
+            <div>
+              <div class="label-tag">Kaldığın yer</div>
+              <div class="title">${escapeHtml(continueLesson.course.title)}</div>
+              <div class="sub">${escapeHtml(continueLesson.lesson.title)} · ${continueLesson.lesson.duration} dk</div>
+            </div>
+          </div>
+          <button class="btn btn-primary" data-continue-lesson="${continueLesson.lesson.id}" data-continue-course="${continueLesson.courseId}">
+            Devam et ${Icon.arrow}
+          </button>
+        </div>
+      ` : !continueLesson && enrolled === 0 ? `
+        <div class="panel" style="text-align:center;padding:48px 24px;margin-bottom:24px;">
+          <div class="empty-icon">♟</div>
+          <div class="empty-title">Henüz kursa kayıt olmadın</div>
+          <div class="empty-text">Bir kurs seç ve ilk dersi tamamla — ilerlemen burada görünecek.</div>
+          <button class="btn btn-primary" data-route="courses">Kurslara göz at ${Icon.arrow}</button>
+        </div>
+      ` : ''}
+
+      <div class="activity">
+        <div class="activity-head">
+          <div class="panel-title" style="margin:0;">Son aktivite</div>
+        </div>
+        ${activityHtml}
+      </div>
+    </div>
+  `;
+}
+
+function loginView() {
+  return `
+    <div class="login-page">
+      <div class="login-head">
+        <div class="login-mark">♞</div>
+        <h1>${loginMode === 'login' ? 'Tekrar hoş geldin' : 'Üyeliğini oluştur'}</h1>
+        <p>${loginMode === 'login' ? 'Hesabına giriş yap, kaldığın yerden devam et.' : 'Birkaç saniyede başla. Tüm ilerlemen kaydedilir.'}</p>
+      </div>
+      <div class="form-card">
+        ${loginMode === 'register' ? `
+          <div class="field">
+            <label>Ad Soyad</label>
+            <input type="text" id="login-name" placeholder="Örn. Ayşe Yılmaz" autocomplete="name">
+          </div>
+        ` : ''}
+        <div class="field">
+          <label>E-posta</label>
+          <input type="email" id="login-email" placeholder="ornek@mail.com" autocomplete="email">
+        </div>
+        <div class="field">
+          <label>Parola</label>
+          <input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        ${loginErr ? `<div class="alert alert-error" style="margin-bottom:12px;">
+          <span class="icon">${Icon.x}</span><div>${escapeHtml(loginErr)}</div>
+        </div>` : ''}
+        <button class="btn btn-primary" data-action="login-submit" style="width:100%;">
+          ${loginMode === 'login' ? 'Giriş yap' : 'Üyeliği oluştur'}
+        </button>
+        <div class="form-toggle">
+          <a href="#" data-action="login-toggle">
+            ${loginMode === 'login' ? 'Hesabın yok mu? Üye ol →' : 'Zaten üye misin? Giriş yap →'}
+          </a>
+        </div>
+      </div>
+      <div class="login-foot">
+        Veriler cihazına yerel olarak kaydedilir.<br>
+        Devam ederek Kullanım Şartları'nı kabul etmiş olursun.
+      </div>
+    </div>
+  `;
+}
+
+function footerView() {
+  return `
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <h4>satrancdersleri.com</h4>
+            <p>Türkiye'nin satranç eğitim platformu. Yedi yaşından yetmişine, ilk hamleden büyük ustaya.</p>
+          </div>
+          ${[
+            { t: 'Platform', l: ['Dersler', 'Bulmacalar', 'Üyelik', 'Eğitmenler'] },
+            { t: 'Şirket', l: ['Hakkımızda', 'İletişim', 'Kariyer', 'KVKK'] },
+            { t: 'Destek', l: ['SSS', 'Yardım', 'İletişim'] },
+          ].map(c => `
+            <div class="footer-col">
+              <h5>${c.t}</h5>
+              <ul>${c.l.map(x => `<li>${x}</li>`).join('')}</ul>
+            </div>
+          `).join('')}
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 satrancdersleri.com</span>
+          <span>Bütün haklar saklıdır</span>
+        </div>
+      </div>
+    </footer>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════════
+function render() {
+  const app = document.getElementById('app');
+  let pageHtml = '';
+  switch (view) {
+    case 'home': pageHtml = homeView(); break;
+    case 'courses': pageHtml = coursesView(); break;
+    case 'course': pageHtml = courseView(); break;
+    case 'lesson': pageHtml = lessonView(); break;
+    case 'puzzles': pageHtml = puzzlesView(); break;
+    case 'dashboard': pageHtml = dashboardView(); break;
+    case 'login': pageHtml = loginView(); break;
+    default: pageHtml = homeView();
+  }
+  app.innerHTML = navView() + pageHtml + footerView();
+  bindEvents();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EVENT BINDING
+// ═══════════════════════════════════════════════════════════════
+function bindEvents() {
+  // Navigation routes
+  document.querySelectorAll('[data-route]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const route = el.getAttribute('data-route');
+      if (route === 'puzzles') initPuzzleState();
+      setView(route);
+    });
+  });
+
+  // Filters
+  document.querySelectorAll('[data-filter]').forEach(el => {
+    el.addEventListener('click', () => {
+      courseFilter = el.getAttribute('data-filter');
+      render();
+    });
+  });
+
+  // Course actions
+  document.querySelectorAll('[data-open-course]').forEach(el => {
+    el.addEventListener('click', () => {
+      openCourse(el.getAttribute('data-open-course'));
+    });
+  });
+
+  document.querySelectorAll('[data-enroll]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-enroll');
+      const course = COURSES.find(c => c.id === id);
+      updateState(s => {
+        if (s.enrolled.includes(id)) return s;
+        return {
+          ...s,
+          enrolled: [...s.enrolled, id],
+          activity: [
+            { ts: Date.now(), type: 'enroll', ref: id, label: course.title },
+            ...s.activity,
+          ].slice(0, 50),
+        };
+      });
+      openCourse(id);
+    });
+  });
+
+  document.querySelectorAll('[data-open-lesson]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-open-lesson');
+      const lesson = (LESSONS[activeCourseId] || []).find(l => l.id === id);
+      if (lesson) openLesson(lesson, activeCourseId);
+    });
+  });
+
+  // Continue from dashboard
+  document.querySelectorAll('[data-continue-lesson]').forEach(el => {
+    el.addEventListener('click', () => {
+      const lid = el.getAttribute('data-continue-lesson');
+      const cid = el.getAttribute('data-continue-course');
+      const lesson = (LESSONS[cid] || []).find(l => l.id === lid);
+      if (lesson) openLesson(lesson, cid);
+    });
+  });
+
+  // Board clicks
+  document.querySelectorAll('[data-board-click]').forEach(el => {
+    el.addEventListener('click', () => {
+      const target = el.getAttribute('data-board-click');
+      const sq = el.getAttribute('data-square');
+      if (target === 'scene') handleSceneClick(sq);
+      else if (target === 'puzzle') handlePuzzleClick(sq);
+    });
+  });
+
+  // Generic actions
+  document.querySelectorAll('[data-action]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleAction(el.getAttribute('data-action'));
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════════
+function handleAction(action) {
+  switch (action) {
+    case 'toggle-nav':
+      mobileNavOpen = !mobileNavOpen;
+      render();
+      break;
+    case 'logout':
+      logout();
+      break;
+    case 'scene-prev':
+      if (activeSceneIdx > 0) {
+        activeSceneIdx--;
+        initSceneState();
+        render();
+      }
+      break;
+    case 'scene-next':
+      if (activeSceneIdx === activeLesson.scenes.length - 1) {
+        completeLesson();
+      } else {
+        activeSceneIdx++;
+        initSceneState();
+        render();
+      }
+      break;
+    case 'scene-hint':
+      sceneShowHint = true;
+      render();
+      break;
+    case 'lesson-exit':
+      setView(activeCourseId ? 'course' : 'courses');
+      break;
+    case 'puzzle-prev':
+      activePuzzleIdx = (activePuzzleIdx - 1 + PUZZLES.length) % PUZZLES.length;
+      initPuzzleState();
+      render();
+      break;
+    case 'puzzle-next':
+      activePuzzleIdx = (activePuzzleIdx + 1) % PUZZLES.length;
+      initPuzzleState();
+      render();
+      break;
+    case 'puzzle-hint':
+      puzzleShowHint = true;
+      render();
+      break;
+    case 'puzzle-reset':
+      initPuzzleState();
+      render();
+      break;
+    case 'login-toggle':
+      loginMode = loginMode === 'login' ? 'register' : 'login';
+      loginErr = '';
+      render();
+      break;
+    case 'login-submit':
+      submitLogin();
+      break;
+  }
+}
+
+function handleSceneClick(sq) {
+  const scene = activeLesson.scenes[activeSceneIdx];
+  if (scene.type !== 'try' || sceneSolved) return;
+  if (sceneSelected) {
+    const isOwn = scenePos[sq] && isUpper(scenePos[sq]);
+    if (sceneSelected === scene.solution.from && sq === scene.solution.to) {
+      const np = { ...scenePos };
+      np[sq] = np[sceneSelected];
+      delete np[sceneSelected];
+      scenePos = np;
+      sceneSolved = true;
+      sceneSelected = null;
+      sceneFeedback = { type: 'success', msg: 'Mükemmel hamle!' };
+    } else if (isOwn) {
+      sceneSelected = sq;
+      sceneFeedback = null;
+    } else {
+      sceneFeedback = { type: 'error', msg: 'Hmm, doğru değil. Tekrar dene.' };
+      sceneSelected = null;
+    }
+  } else if (scenePos[sq] && isUpper(scenePos[sq])) {
+    sceneSelected = sq;
+  }
+  render();
+}
+
+function handlePuzzleClick(sq) {
+  if (puzzleSolved) return;
+  const p = PUZZLES[activePuzzleIdx];
+  if (puzzleSelected) {
+    const isOwn = puzzlePos[sq] && isUpper(puzzlePos[sq]);
+    if (puzzleSelected === p.solution.from && sq === p.solution.to) {
+      const np = { ...puzzlePos };
+      np[sq] = np[puzzleSelected];
+      delete np[puzzleSelected];
+      puzzlePos = np;
+      puzzleSolved = true;
+      puzzleSelected = null;
+      puzzleFeedback = { type: 'success', msg: 'Mükemmel — bulmaca çözüldü!' };
+
+      if (!state.solvedPuzzles.includes(p.id)) {
+        const award = puzzleAttempts === 0 ? 15 : 8;
+        updateState(s => ({
+          ...s,
+          solvedPuzzles: [...s.solvedPuzzles, p.id],
+          rating: s.rating + award,
+          activity: [
+            { ts: Date.now(), type: 'puzzle_solve', ref: p.id, label: `${p.topic} — ${p.difficulty}` },
+            ...s.activity,
+          ].slice(0, 50),
+        }));
+        return; // updateState already calls render
+      }
+    } else if (isOwn) {
+      puzzleSelected = sq;
+      puzzleFeedback = null;
+    } else {
+      puzzleAttempts++;
+      updateState(s => ({ ...s, failedPuzzles: s.failedPuzzles + 1 }));
+      puzzleFeedback = { type: 'error', msg: 'Hmm, bu çözüm değil. Başka bir hamle dene.' };
+      puzzleSelected = null;
+      return;
+    }
+  } else if (puzzlePos[sq] && isUpper(puzzlePos[sq])) {
+    puzzleSelected = sq;
+  }
+  render();
+}
+
+function completeLesson() {
+  const lesson = activeLesson;
+  if (!state.completedLessons.includes(lesson.id)) {
+    updateState(s => ({
+      ...s,
+      completedLessons: [...s.completedLessons, lesson.id],
+      totalMinutes: s.totalMinutes + lesson.duration,
+      activity: [
+        { ts: Date.now(), type: 'lesson_complete', ref: lesson.id, label: lesson.title, minutes: lesson.duration },
+        ...s.activity,
+      ].slice(0, 50),
+    }));
+  }
+  setView(activeCourseId ? 'course' : 'courses');
+}
+
+function submitLogin() {
+  const email = document.getElementById('login-email')?.value || '';
+  const pw = document.getElementById('login-pw')?.value || '';
+  const name = document.getElementById('login-name')?.value || '';
+
+  loginErr = '';
+  if (!email || !email.includes('@')) { loginErr = 'Geçerli bir e-posta gir.'; render(); return; }
+  if (!pw || pw.length < 4) { loginErr = 'Parola en az 4 karakter olmalı.'; render(); return; }
+  if (loginMode === 'register' && !name.trim()) { loginErr = 'Adını gir.'; render(); return; }
+
+  const displayName = name.trim() || email.split('@')[0] || 'Üye';
+  updateState(s => ({ ...s, user: { name: displayName, email, joinedAt: Date.now() } }));
+  setView('dashboard');
+}
+
+// Enter key on login fields
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && view === 'login') {
+    const active = document.activeElement;
+    if (active && active.tagName === 'INPUT') {
+      e.preventDefault();
+      submitLogin();
+    }
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+initPuzzleState(); // pre-init so first render is clean
+render();
+</script>
+</body>
+</html>
