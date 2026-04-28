@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkmate Pro Academy</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chessboard.js & Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f8fafc; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // --- Mock Firebase/Environment Logic ---
+        // Vercel'de yayınlarken Firebase config'iniz yoksa sistem hata vermemesi için korumalı yapıldı
+        const appId = "chess-pro-v1";
+        
+        // Lucide Icon Component for React in HTML
+        const Icon = ({ name, size = 20, className = "" }) => {
+            const iconRef = useRef(null);
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]);
+            return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
+        };
+
+        function App() {
+            const [currentView, setCurrentView] = useState('landing');
+            const [selectedCourse, setSelectedCourse] = useState(null);
+            const [userProgress, setUserProgress] = useState({ completedLessons: [] });
+
+            // Örnek Veriler (Gerçek uygulamada Firebase'den çekilecek)
+            const [courses] = useState([
+                { id: 'c1', title: 'Temel Açılışlar', description: 'Satranç tahtasına hakim olmanın ilk adımı.', level: 'BAŞLANGIÇ', icon: '🏰' },
+                { id: 'c2', title: 'Orta Oyun Stratejileri', description: 'Konumsal üstünlük sağlamayı öğrenin.', level: 'ORTA', icon: '⚔️' },
+                { id: 'c3', title: 'Oyun Sonu Sanatı', description: 'Kazanç pozisyonlarını galibiyete dönüştürün.', level: 'İLERİ', icon: '🏆' }
+            ]);
+
+            const [lessons] = useState([
+                { id: 'l1', courseId: 'c1', title: 'Merkez Kontrolü', content: 'Merkez karelerin (e4, d4, e5, d5) önemi.', videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', fen: 'start' },
+                { id: 'l2', courseId: 'c1', title: 'At ve Fil Gelişimi', content: 'Hafif taşların oyuna hızlı girmesi.', videoUrl: '', fen: 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3' }
+            ]);
+
+            const markComplete = (id) => {
+                if (!userProgress.completedLessons.includes(id)) {
+                    setUserProgress(prev => ({ ...prev, completedLessons: [...prev.completedLessons, id] }));
+                }
+            };
+
+            return (
+                <div className="min-h-screen">
+                    {/* Navigation */}
+                    <nav className="sticky top-0 z-50 glass border-b border-white/5 px-6 h-20 flex items-center justify-between">
+                        <div className="flex items-center gap-4 cursor-pointer" onClick={() => setCurrentView('landing')}>
+                            <div className="w-10 h-10 bg-amber-500 rounded-lg flex items-center justify-center shadow-lg shadow-amber-500/20">
+                                <Icon name="trophy" className="text-slate-950" />
+                            </div>
+                            <div>
+                                <h1 className="text-lg font-black tracking-tighter leading-none text-white">CHECKMATE</h1>
+                                <span className="text-[10px] text-amber-500 font-bold tracking-[0.2em] uppercase">Pro Academy</span>
+                            </div>
+                        </div>
+                        <div className="hidden md:flex items-center gap-8">
+                            <button onClick={() => setCurrentView('courses')} className="text-sm font-bold text-slate-400 hover:text-white transition-colors">KURSLAR</button>
+                            <button onClick={() => setCurrentView('profile')} className="text-sm font-bold text-slate-400 hover:text-white transition-colors">GELİŞİM</button>
+                            <button onClick={() => setCurrentView('admin')} className="text-slate-500 hover:text-amber-500"><Icon name="settings" /></button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-slate-800 rounded-full border border-white/10 flex items-center justify-center text-amber-500">
+                                <Icon name="user" />
+                            </div>
+                        </div>
+                    </nav>
+
+                    <main className="max-w-7xl mx-auto px-6 py-10">
+                        {currentView === 'landing' && <LandingView onStart={() => setCurrentView('courses')} />}
+                        {currentView === 'courses' && <CourseCatalog courses={courses} onSelect={(c) => { setSelectedCourse(c); setCurrentView('lesson'); }} />}
+                        {currentView === 'lesson' && selectedCourse && (
+                            <LessonInterface 
+                                course={selectedCourse} 
+                                lessons={lessons.filter(l => l.courseId === selectedCourse.id)}
+                                userProgress={userProgress}
+                                onComplete={markComplete}
+                                onBack={() => setCurrentView('courses')}
+                            />
+                        )}
+                        {currentView === 'profile' && <ProfileView progress={userProgress} courses={courses} lessons={lessons} />}
+                        {currentView === 'admin' && <div className="p-20 text-center glass rounded-3xl">Yönetim Paneli - Erişim Yetkisi Gerekli</div>}
+                    </main>
+                </div>
+            );
+        }
+
+        function LandingView({ onStart }) {
+            return (
+                <div className="py-12 grid lg:grid-cols-2 gap-16 items-center">
+                    <div className="space-y-8">
+                        <div className="inline-block px-4 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-500 text-[10px] font-black uppercase tracking-widest">
+                            Pro Seviye Eğitim Platformu
+                        </div>
+                        <h2 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.85]">HAMLENİ <br/><span className="text-amber-500">USTALIKLA</span> YAP.</h2>
+                        <p className="text-lg text-slate-400 max-w-lg leading-relaxed">Dünyanın en zeki oyununu modern yöntemlerle öğrenin. Strateji, disiplin ve zafer sizi bekliyor.</p>
+                        <div className="flex gap-4">
+                            <button onClick={onStart} className="px-8 py-4 bg-amber-500 text-slate-950 font-black rounded-xl hover:scale-105 transition-all shadow-xl shadow-amber-500/20">HEMEN BAŞLA</button>
+                            <button className="px-8 py-4 bg-slate-900 border border-white/5 rounded-xl font-bold">BİLGİ AL</button>
+                        </div>
+                    </div>
+                    <div className="relative aspect-square glass rounded-[3rem] p-12 flex items-center justify-center overflow-hidden">
+                        <Icon name="trophy" size={150} className="text-amber-500 opacity-20 absolute -top-10 -right-10 rotate-12" />
+                        <div className="text-[200px] animate-bounce">♟️</div>
+                    </div>
+                </div>
+            );
+        }
+
+        function CourseCatalog({ courses, onSelect }) {
+            return (
+                <div className="grid md:grid-cols-3 gap-8">
+                    {courses.map(course => (
+                        <div key={course.id} onClick={() => onSelect(course)} className="glass p-8 rounded-[2rem] cursor-pointer group hover:border-amber-500/40 transition-all hover:-translate-y-2">
+                            <div className="text-5xl mb-6 group-hover:scale-110 transition-transform">{course.icon}</div>
+                            <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-2 block">{course.level}</span>
+                            <h3 className="text-2xl font-bold mb-3 group-hover:text-amber-500">{course.title}</h3>
+                            <p className="text-sm text-slate-400 mb-6">{course.description}</p>
+                            <div className="flex justify-between items-center text-slate-500 group-hover:text-amber-500">
+                                <span className="text-xs font-bold uppercase">Derslere Git</span>
+                                <Icon name="chevron-right" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        function LessonInterface({ course, lessons, userProgress, onComplete, onBack }) {
+            const [activeLesson, setActiveLesson] = useState(lessons[0] || null);
+            const [mode, setMode] = useState('video');
+            const [solved, setSolved] = useState(false);
+
+            useEffect(() => {
+                if (mode === 'puzzle' && activeLesson) {
+                    setTimeout(() => {
+                        window.board = window.Chessboard('board', {
+                            draggable: true,
+                            position: activeLesson.fen || 'start',
+                            onDrop: () => { setSolved(true); }
+                        });
+                    }, 100);
+                }
+            }, [mode, activeLesson]);
+
+            if (!activeLesson) return <div>Ders yok.</div>;
+
+            return (
+                <div className="grid lg:grid-cols-12 gap-10">
+                    <div className="lg:col-span-3 space-y-4">
+                        <button onClick={onBack} className="flex items-center gap-2 text-xs font-black text-slate-500 hover:text-white uppercase tracking-widest"><Icon name="arrow-left" size={14}/> Geri</button>
+                        <div className="glass rounded-2xl overflow-hidden">
+                            {lessons.map((l, idx) => (
+                                <button key={l.id} onClick={() => { setActiveLesson(l); setSolved(false); setMode('video'); }} className={`w-full p-4 flex items-center gap-3 border-l-4 ${activeLesson.id === l.id ? 'bg-amber-500/10 border-amber-500' : 'border-transparent hover:bg-white/5'}`}>
+                                    <div className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold ${userProgress.completedLessons.includes(l.id) ? 'bg-green-500 text-white' : 'bg-slate-800'}`}>{idx + 1}</div>
+                                    <span className="text-sm font-bold text-left truncate">{l.title}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="lg:col-span-9 glass p-8 rounded-[2.5rem]">
+                        <div className="flex justify-between items-center mb-8">
+                            <h2 className="text-3xl font-bold">{activeLesson.title}</h2>
+                            <div className="flex bg-slate-950 p-1 rounded-xl">
+                                <button onClick={() => setMode('video')} className={`px-4 py-2 rounded-lg text-xs font-bold ${mode === 'video' ? 'bg-amber-500 text-slate-950' : 'text-slate-500'}`}>VIDEO</button>
+                                <button onClick={() => setMode('puzzle')} className={`px-4 py-2 rounded-lg text-xs font-bold ${mode === 'puzzle' ? 'bg-amber-500 text-slate-950' : 'text-slate-500'}`}>UYGULAMA</button>
+                            </div>
+                        </div>
+
+                        {mode === 'video' ? (
+                            <div className="space-y-6">
+                                <div className="aspect-video bg-black rounded-2xl flex items-center justify-center">
+                                    <Icon name="play" size={60} className="text-amber-500 opacity-20" />
+                                </div>
+                                <p className="text-slate-400">{activeLesson.content}</p>
+                                <button onClick={() => setMode('puzzle')} className="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl">TESTE GEÇ</button>
+                            </div>
+                        ) : (
+                            <div className="grid md:grid-cols-2 gap-10 items-center">
+                                <div className="space-y-6">
+                                    <div className="p-6 bg-white/5 rounded-2xl">
+                                        <p className="font-bold mb-2">Görev:</p>
+                                        <p className="text-slate-400 text-sm">Doğru hamleyi bulun ve uygulayın.</p>
+                                    </div>
+                                    {solved && (
+                                        <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-2xl animate-bounce">
+                                            <p className="text-green-500 font-bold">Harika Hamle!</p>
+                                            <button onClick={() => onComplete(activeLesson.id)} className="mt-4 w-full py-2 bg-green-500 text-slate-950 font-bold rounded-lg">TAMAMLA</button>
+                                        </div>
+                                    )}
+                                </div>
+                                <div id="board" className="w-full max-w-[400px] border-4 border-slate-900 rounded-lg shadow-2xl mx-auto"></div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        function ProfileView({ progress, courses, lessons }) {
+            const completed = progress.completedLessons.length;
+            const pct = lessons.length > 0 ? (completed / lessons.length) * 100 : 0;
+            return (
+                <div className="max-w-4xl mx-auto space-y-10">
+                    <div className="glass p-10 rounded-[3rem] flex items-center gap-10 relative overflow-hidden">
+                        <Icon name="award" size={200} className="absolute -right-10 -bottom-10 text-amber-500 opacity-5" />
+                        <div className="w-32 h-32 bg-amber-500 rounded-[2.5rem] flex items-center justify-center text-slate-950 shadow-2xl shadow-amber-500/30">
+                            <Icon name="user" size={60} />
+                        </div>
+                        <div>
+                            <h2 className="text-4xl font-black mb-2">BÜYÜKUSTA ADAYI</h2>
+                            <p className="text-slate-500 text-sm tracking-widest font-mono">ID: CHESS-STUDENT-001</p>
+                            <div className="flex gap-4 mt-6">
+                                <div className="glass px-4 py-2 rounded-xl text-center">
+                                    <span className="text-[10px] font-bold block text-slate-500 uppercase">Dersler</span>
+                                    <span className="text-xl font-black text-amber-500">{completed}</span>
+                                </div>
+                                <div className="glass px-4 py-2 rounded-xl text-center">
+                                    <span className="text-[10px] font-bold block text-slate-500 uppercase">Başarı</span>
+                                    <span className="text-xl font-black text-amber-500">%{Math.round(pct)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+
+```
